@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "apps.core",
     "apps.waitlist",
+    "apps.vendors",
 ]
 
 MIDDLEWARE = [
