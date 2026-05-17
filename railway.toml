@@ -3,7 +3,7 @@ builder = "nixpacks"
 buildCommand = "DJANGO_SETTINGS_MODULE=config.settings.production SECRET_KEY=build-secret ALLOWED_HOSTS=localhost python manage.py collectstatic --noinput"
 
 [deploy]
-preDeployCommand = "python manage.py migrate --noinput"
+preDeployCommand = "DJANGO_SETTINGS_MODULE=config.settings.production python manage.py migrate --noinput"
 startCommand = "gunicorn config.wsgi --bind 0.0.0.0:$PORT"
 healthcheckPath = "/health/"
 healthcheckTimeout = 120
