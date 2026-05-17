@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "apps.core",
     "apps.waitlist",
     "apps.vendors",
+    "apps.sponsors",
 ]
 
 MIDDLEWARE = [
