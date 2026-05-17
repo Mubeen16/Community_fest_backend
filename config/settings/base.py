@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "apps.core",
+    "apps.waitlist",
 ]
 
 MIDDLEWARE = [
@@ -75,10 +76,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "common.pagination.StandardPagination",
+    "PAGE_SIZE": 20,
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
     ],
-    "PAGE_SIZE": 20,
+    "EXCEPTION_HANDLER": "common.exceptions.custom_exception_handler",
 }
 
 # Password validation

@@ -21,6 +21,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path(
         "api/v1/events/<slug:event_slug>/",
-        include("apps.core.urls"),
+        include(
+            [
+                path("", include("apps.core.urls")),
+                path("waitlist/", include("apps.waitlist.urls")),
+            ]
+        ),
     ),
 ]
