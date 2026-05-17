@@ -3,12 +3,12 @@ from django.db import models
 
 class SponsorLead(models.Model):
     class TierInterest(models.TextChoices):
-        EVENT_PARTNER = "event_partner", "Event Partner"
-        STRATEGIC_PARTNER = "strategic_partner", "Strategic Partner"
-        COMMUNITY_PARTNER = "community_partner", "Community Partner"
-        SUPPORTER = "supporter", "Supporter"
-        FRIEND = "friend", "Friend"
-        UNDECIDED = "undecided", "Undecided"
+        TITLE_SPONSOR = "title_sponsor", "Title Sponsor (from £10,000)"
+        DIAMOND = "diamond", "Diamond (from £5,000)"
+        PLATINUM = "platinum", "Platinum (from £3,000)"
+        GOLD = "gold", "Gold (£2,000)"
+        SILVER = "silver", "Silver (£1,000)"
+        UNDECIDED = "undecided", "Not sure yet"
 
     class Status(models.TextChoices):
         NEW = "new", "New"

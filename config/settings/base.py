@@ -26,6 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "")
 DEBUG = os.environ.get("DEBUG", "False").lower() in ("true", "1", "yes")
 
+API_BASE_URL = os.environ.get("API_BASE_URL", "http://localhost:8000")
+
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
+STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
+STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
+
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -43,6 +49,7 @@ INSTALLED_APPS = [
     "apps.waitlist",
     "apps.vendors",
     "apps.sponsors",
+    "apps.tickets",
 ]
 
 MIDDLEWARE = [

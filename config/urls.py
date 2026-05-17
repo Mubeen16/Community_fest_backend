@@ -27,6 +27,7 @@ urlpatterns = [
                 path("waitlist/", include("apps.waitlist.urls")),
                 path("vendors/", include("apps.vendors.urls")),
                 path("sponsors/", include("apps.sponsors.urls")),
+                path("tickets/", include("apps.tickets.urls")),
             ]
         ),
     ),
