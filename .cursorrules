@@ -1,0 +1,83 @@
+# Community Event OS — Backend Cursor Rules
+
+## Project
+Multi-tenant event platform API. Started as London Community Fest backend, designed to serve any community organisation. Built by a solo founder — code quality over speed.
+
+## Stack
+- Python 3.13
+- Django 6.0 (latest)
+- Django REST Framework 3.17
+- PostgreSQL (production via Railway)
+- SQLite (local development)
+
+## Architecture Rules
+- Every data model connects to Event, every Event connects to Organisation
+- All views that touch event-scoped data MUST inherit from EventScopedMixin (common/mixins.py)
+- URL pattern: /api/v1/events/{event_slug}/... — event slug scopes everything
+- Business logic lives in services/ not in views — views are thin (under 30 lines)
+- Settings split: config/settings/base.py, development.py, production.py
+- Environment variables loaded via python-dotenv — never hardcode secrets
+
+## Folder Structure (enforced)
+- config/ — project settings, urls, wsgi only
+- config/settings/ — base.py, development.py, production.py
+- apps/core/ — Organisation, Event, OrganisationMembership models
+- apps/waitlist/ — email capture
+- apps/tickets/ — orders, tickets, Stripe, QR codes
+- apps/vendors/ — vendor applications with status workflow
+- apps/sponsors/ — sponsor leads with status tracking
+- apps/checkin/ — event-day QR scanning and stats
+- common/ — shared mixins, permissions, pagination, exceptions
+- requirements/ — base.txt, dev.txt, prod.txt
+
+## Django App Rules
+- Each app has: models.py, serializers.py, views.py, urls.py, admin.py
+- Complex logic gets a services.py or services/ directory (e.g. apps/tickets/services/stripe.py)
+- Models use explicit related_name on all ForeignKey fields
+- All models that belong to an event have: event = models.ForeignKey("core.Event", on_delete=models.CASCADE, related_name="...")
+- Use choices for status fields — define them as class-level constants on the model
+- Add __str__ methods to every model
+- Register every model in admin.py
+
+## Serializer Rules
+- Use ModelSerializer for standard CRUD
+- Use plain Serializer for custom input (e.g. checkout requests)
+- Validate at serializer level, not view level
+- Never expose internal IDs in API responses — use slugs or reference codes
+- Include read_only_fields explicitly
+
+## View Rules
+- Use DRF generic views (CreateAPIView, ListAPIView, RetrieveAPIView) not ViewSets
+- Inherit EventScopedMixin for all event-scoped views
+- Keep views under 30 lines — move logic to services
+- Set permission_classes explicitly on every view
+- Use get_object_or_404, never bare .get() that might 500
+
+## API Response Rules
+- Success: return serialized data directly
+- Created: return 201 with created object
+- Errors: return {"detail": "message"} or {"field": ["error"]}
+- Never return raw Python tracebacks
+- Use custom exception handler from common/exceptions.py
+
+## Security Rules
+- No hardcoded secrets — use environment variables
+- Stripe webhook signature verification required
+- Rate limiting on public endpoints (waitlist, vendor forms)
+- CORS restricted to frontend domain in production
+- No raw SQL — use Django ORM
+
+## Code Quality
+- No any types in type hints
+- No print() — use logging module
+- No bare except: — always catch specific exceptions
+- Add docstrings to models, services, and non-obvious views
+- Keep imports sorted: stdlib, third-party, django, local apps
+
+## What NOT to Do
+- Do not use ViewSets or routers — use explicit URL patterns
+- Do not put business logic in views — use services
+- Do not hardcode event IDs — use EventScopedMixin
+- Do not create custom User model yet — use Django's built-in auth
+- Do not add Celery, Redis, or WebSockets — not needed yet
+- Do not write frontend code in this repo
